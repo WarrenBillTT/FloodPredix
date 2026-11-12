@@ -3,11 +3,16 @@ export interface NavItem {
   href: string;
 }
 
-export interface Feature {
-  icon: React.ComponentType<{ className?: string }>;
+export interface ProcessStep {
   title: string;
+  body: string;
+  code?: string;
+}
+
+export interface DashboardPage {
+  name: string;
   description: string;
-  badge: string;
+  tag: string;
 }
 
 export interface PricingPlan {
@@ -17,25 +22,8 @@ export interface PricingPlan {
   period: string;
   features: string[];
   buttonText: string;
-  popular: boolean;
+  href: string;
+  featured: boolean;
 }
 
-export interface Testimonial {
-  name: string;
-  role: string;
-  organization: string;
-  avatar: string;
-  content: string;
-  rating: number;
-  location: string;
-}
-
-export interface FooterSection {
-  title: string;
-  links: Array<{
-    name: string;
-    href: string;
-  }>;
-}
-
-
+export type WaterLevel = "normal" | "warning" | "critical";

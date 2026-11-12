@@ -1,102 +1,60 @@
 import { useState } from "react";
-import { motion } from "motion/react";
-import { Button } from "../ui/button";
-import { Menu, X } from "lucide-react";
 import type { NavItem } from "../../types";
-import { ImageWithFallback } from "../common/ImageWithFallback";
+import { DASHBOARD_URL } from "../../lib/links";
+
+const navItems: NavItem[] = [
+  { name: "How it works", href: "#how" },
+  { name: "Features", href: "#features" },
+  { name: "Pricing", href: "#pricing" },
+  { name: "Team", href: "#team" },
+  { name: "Contact", href: "#contact" },
+];
 
 export function Navbar() {
-  const [isOpen, setIsOpen] = useState(false);
-
-  // Add your logo image URL here
-  const logoUrl = "https://floodpredix.s3.shinvinc.tech/FloodPredix.png"; // Replace with your actual logo URL
-
-  const navItems: NavItem[] = [
-    { name: "Features", href: "#features" },
-    { name: "Pricing", href: "#pricing" },
-    { name: "Testimonials", href: "#testimonials" },
-    { name: "Contact", href: "#contact" },
-  ];
+  const [open, setOpen] = useState(false);
 
   return (
-    <motion.nav
-      initial={{ y: -100, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.8 }}
-      className="fixed top-0 w-full bg-background/80 backdrop-blur-md border-b border-border z-50"
-    >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
-          <motion.div
-            whileHover={{ scale: 1.05 }}
-            className="flex items-center space-x-2"
-          >
-            <div className="w-8 h-8 rounded-lg flex items-center justify-center overflow-hidden">
-              <ImageWithFallback
-                src={logoUrl}
-                alt="FloodPredix Logo"
-                className="w-full h-full object-contain"
-              />
-            </div>
-            <span className="text-xl font-semibold">FloodPredix</span>
-          </motion.div>
+    <header className="nav">
+      <div className="wrap nav-inner">
+        <a href="#top" className="brand" aria-label="FloodPredix home">
+          <img src="/logo.png" alt="" />
+          FloodPredix
+        </a>
 
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8">
-            {navItems.map((item) => (
-              <motion.a
-                key={item.name}
-                href={item.href}
-                whileHover={{ y: -2 }}
-                className="text-foreground hover:text-blue-600 transition-colors"
-              >
-                {item.name}
-              </motion.a>
-            ))}
-            <Button asChild className="bg-blue-600 hover:bg-blue-700">
-              <a href="http://localhost:5173">Get Started</a>
-            </Button>
-          </div>
+        <nav className="nav-links" aria-label="Main">
+          {navItems.map((item) => (
+            <a key={item.name} href={item.href}>
+              {item.name}
+            </a>
+          ))}
+          <a className="btn btn-solid" href={DASHBOARD_URL}>
+            Open dashboard
+          </a>
+        </nav>
 
-          {/* Mobile menu button */}
-          <div className="md:hidden">
-            <button
-              onClick={() => setIsOpen(!isOpen)}
-              className="text-foreground hover:text-blue-600"
-              aria-label="Toggle menu"
-              type="button"
-            >
-              {isOpen ? <X size={24} /> : <Menu size={24} />}
-            </button>
-          </div>
-        </div>
-
-        {/* Mobile Navigation */}
-        {isOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            className="md:hidden py-4 border-t border-border"
-          >
-            <div className="flex flex-col space-y-4">
-              {navItems.map((item) => (
-                <a
-                  key={item.name}
-                  href={item.href}
-                  className="text-foreground hover:text-blue-600 transition-colors"
-                  onClick={() => setIsOpen(false)}
-                >
-                  {item.name}
-                </a>
-              ))}
-              <Button asChild className="bg-blue-600 hover:bg-blue-700 w-fit">
-                <a href="http://localhost:5173">Get Started</a>
-              </Button>
-            </div>
-          </motion.div>
-        )}
+        <button
+          type="button"
+          className="nav-toggle"
+          aria-expanded={open}
+          aria-controls="nav-sheet"
+          onClick={() => setOpen((o) => !o)}
+        >
+          {open ? "Close" : "Menu"}
+        </button>
       </div>
-    </motion.nav>
+
+      {open && (
+        <nav id="nav-sheet" className="nav-sheet" aria-label="Mobile">
+          {navItems.map((item) => (
+            <a key={item.name} href={item.href} onClick={() => setOpen(false)}>
+              {item.name}
+            </a>
+          ))}
+          <a className="btn btn-solid" href={DASHBOARD_URL}>
+            Open dashboard
+          </a>
+        </nav>
+      )}
+    </header>
   );
 }
